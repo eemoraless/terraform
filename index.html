@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Registration List</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Registered Projects</h1>
+    <button onclick="location.href='new-project.html'">➕ New Project</button>
+    <table id="projectsTable">
+      <thead>
+        <tr>
+          <th>Jira ID</th>
+          <th>Project Name</th>
+          <th>Cloud</th>
+          <th>Environment</th>
+          <th>Coverage</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    async function loadProjects() {
+      const response = await fetch("data/projects-registration.csv");
+      const data = await response.text();
+      const rows = data.trim().split("\n").slice(1); // skip header
+      const tableBody = document.querySelector("#projectsTable tbody");
+
+      rows.forEach(row => {
+        const cols = row.split(",").map(cell => cell.replace(/(^"|"$)/g, ""));
+        const tr = document.createElement("tr");
+        cols.forEach(col => {
+          const td = document.createElement("td");
+          td.textContent = col;
+          tr.appendChild(td);
+        });
+        tableBody.appendChild(tr);
+      });
+    }
+
+    loadProjects();
+  </script>
+</body>
+</html>
